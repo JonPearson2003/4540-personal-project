@@ -1,6 +1,6 @@
 namespace BuildTrack.Contracts.Models;
 
-public sealed record UserDto(
+public sealed record UsersDto(
 	int UserId,
 	string Name,
 	string Email,
