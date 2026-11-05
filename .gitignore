@@ -1,6 +1,2 @@
-src\BuildTrack.App\bin
-src\BuildTrack.App\obj
-src\BuildTrack.Api\bin
-src\BuildTrack.Api\obj
-src\BuildTrack.Contracts\bin
-src\BuildTrack.Contracts\obj
+**/bin/
+**/obj/
