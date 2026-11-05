@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BuildTrack.Api/BuildTrack.Api.csproj" />
+    <Project Path="src/BuildTrack.App/BuildTrack.App.csproj" />
+    <Project Path="src/BuildTrack.Contracts/BuildTrack.Contracts.csproj" />
+  </Folder>
+</Solution>

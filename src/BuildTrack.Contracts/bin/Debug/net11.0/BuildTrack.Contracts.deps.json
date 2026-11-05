@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v11.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v11.0": {
+      "BuildTrack.Contracts/1.0.0": {
+        "runtime": {
+          "BuildTrack.Contracts.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "BuildTrack.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

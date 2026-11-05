@@ -1,0 +1,13 @@
+C:\Code\CSCI 4540\4540-personal-project\src\BuildTrack.Contracts\bin\Debug\net11.0\BuildTrack.Contracts.deps.json
+C:\Code\CSCI 4540\4540-personal-project\src\BuildTrack.Contracts\bin\Debug\net11.0\BuildTrack.Contracts.dll
+C:\Code\CSCI 4540\4540-personal-project\src\BuildTrack.Contracts\bin\Debug\net11.0\BuildTrack.Contracts.pdb
+C:\Code\CSCI 4540\4540-personal-project\src\BuildTrack.Contracts\obj\Debug\net11.0\BuildTrack.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Code\CSCI 4540\4540-personal-project\src\BuildTrack.Contracts\obj\Debug\net11.0\BuildTrack.Contracts.AssemblyInfoInputs.cache
+C:\Code\CSCI 4540\4540-personal-project\src\BuildTrack.Contracts\obj\Debug\net11.0\BuildTrack.Contracts.AssemblyInfo.cs
+C:\Code\CSCI 4540\4540-personal-project\src\BuildTrack.Contracts\obj\Debug\net11.0\BuildTrack.Contracts.csproj.CoreCompileInputs.cache
+C:\Code\CSCI 4540\4540-personal-project\src\BuildTrack.Contracts\obj\Debug\net11.0\BuildTrack.Contracts.sourcelink.json
+C:\Code\CSCI 4540\4540-personal-project\src\BuildTrack.Contracts\obj\Debug\net11.0\BuildTrack.Contracts.dll
+C:\Code\CSCI 4540\4540-personal-project\src\BuildTrack.Contracts\obj\Debug\net11.0\refint\BuildTrack.Contracts.dll
+C:\Code\CSCI 4540\4540-personal-project\src\BuildTrack.Contracts\obj\Debug\net11.0\BuildTrack.Contracts.pdb
+C:\Code\CSCI 4540\4540-personal-project\src\BuildTrack.Contracts\obj\Debug\net11.0\ref\BuildTrack.Contracts.dll
+C:\Code\CSCI 4540\4540-personal-project\src\BuildTrack.Contracts\obj\Debug\net11.0\BuildTra.8AEBF63E.Up2Date
