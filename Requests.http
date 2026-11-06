@@ -1,0 +1,52 @@
+@baseUrl = https://hs4bdngw-5050.use2.devtunnels.ms
+@userId = 1
+
+### Retrieve all
+GET {{baseUrl}}/api/buildtrack/users
+Accept: application/json
+
+### Create
+POST {{baseUrl}}/api/buildtrack/users
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "SecurePassword123!",
+  "role": "worker"
+}
+    
+
+### Retrieve one
+GET {{baseUrl}}/api/buildtrack/users/{{userId}}
+Accept: application/json
+
+### Update
+PUT {{baseUrl}}/api/buildtrack/users/{{userId}}
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "SecurePassword123!",
+  "role": "manager"
+}
+
+
+### Delete
+DELETE {{baseUrl}}/api/buildtrack/users/{{userId}}
+
+### Invalid email: expect 400
+POST {{baseUrl}}/api/buildtrack/users
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "",
+  "password": "SecurePassword123!",
+  "role": "User"
+}
+
+### Missing ID: expect 404
+GET {{baseUrl}}/api/buildtrack/users/999999
+Accept: application/json
