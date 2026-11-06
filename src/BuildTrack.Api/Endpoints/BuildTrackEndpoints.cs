@@ -11,11 +11,11 @@ public static class BuildTrackEndpoints
 	public static WebApplication MapBuildTrackEndpoints(this WebApplication app)
 	{
 		var group = app.MapGroup("/api/buildtrack");
-		group.MapGet("", GetAllUsersAsync);
-		group.MapGet("/{id:int}", GetByUserIdAsync).WithName(nameof(GetByUserIdAsync));
-		group.MapPost("", CreateUserAsync);
-		group.MapPut("/{id:int}", UpdateUserAsync);
-		group.MapDelete("/{id:int}", DeleteUserAsync);
+		group.MapGet("/users", GetAllUsersAsync);
+		group.MapGet("/users/{id:int}", GetByUserIdAsync).WithName(nameof(GetByUserIdAsync));
+		group.MapPost("/users", CreateUserAsync);
+		group.MapPut("/users/{id:int}", UpdateUserAsync);
+		group.MapDelete("/users/{id:int}", DeleteUserAsync);
 		return app;
 	}
 
