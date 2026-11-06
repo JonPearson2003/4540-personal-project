@@ -22,15 +22,11 @@
 				<Entry AutomationId="EditEmailEntry" Background="White"
 					   Placeholder="User email" PlaceholderColor="#52606D"
 					   Text="{Binding Email, Mode=TwoWay}" TextColor="#17202A" />
-				<Label Text="Password" TextColor="#17202A" />
-				<Entry AutomationId="EditPasswordEntry" Background="White"
-					   Placeholder="User password" PlaceholderColor="#52606D"
-					   Text="{Binding Password, Mode=TwoWay}" TextColor="#17202A" />
 				<Label Text="Role" TextColor="#17202A" />
 				<Entry AutomationId="EditRoleEntry" Background="White"
 					   Placeholder="User role" PlaceholderColor="#52606D"
 					   Text="{Binding Role, Mode=TwoWay}" TextColor="#17202A" />
-				</HorizontalStackLayout>
+				<!-- </HorizontalStackLayout> -->
 				<Label AutomationId="EditErrorLabel" IsVisible="{Binding HasError}"
 					   Text="{Binding ErrorMessage}" TextColor="#B42318" />
 				<Grid ColumnDefinitions="*,*" ColumnSpacing="10">

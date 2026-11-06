@@ -33,11 +33,11 @@ public partial class CreateUsersViewModel(UsersApiService api) : ObservableObjec
 		{
 			IsBusy = true;
 			ErrorMessage = string.Empty;
-			await api.CreateAsync(new UpsertUsersRequest
+			await api.CreateAsync(new CreateUserRequest
 			{
 				Name = Name.Trim(),
 				Email = Email.Trim(),
-				Password = Password.Trim(),
+				Password = Password,
 				Role = Role.Trim()
 			});
 			await Shell.Current.GoToAsync("..");

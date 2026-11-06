@@ -71,7 +71,7 @@ public partial class EditUsersViewModel(UsersApiService api)
 		{
 			IsBusy = true;
 			ErrorMessage = string.Empty;
-			await api.UpdateAsync(UserId, new UpsertUsersRequest
+			await api.UpdateAsync(UserId, new UpdateUserRequest
 			{
 				Name = Name.Trim(),
 				Email = Email.Trim(),

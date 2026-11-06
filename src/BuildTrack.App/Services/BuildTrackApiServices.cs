@@ -24,7 +24,7 @@ public sealed class UsersApiService(HttpClient httpClient)
 	}
 
 	public async Task<UsersDto> CreateAsync(
-		UpsertUsersRequest request, CancellationToken cancellationToken = default)
+		CreateUserRequest request, CancellationToken cancellationToken = default)
 	{
 		using var response = await httpClient.PostAsJsonAsync(
 			"api/buildtrack/users", request, cancellationToken);
@@ -34,7 +34,7 @@ public sealed class UsersApiService(HttpClient httpClient)
 	}
 
 	public async Task UpdateAsync(
-		int id, UpsertUsersRequest request, CancellationToken cancellationToken = default)
+		int id, UpdateUserRequest request, CancellationToken cancellationToken = default)
 	{
 		using var response = await httpClient.PutAsJsonAsync(
 			$"api/buildtrack/users/{id}", request, cancellationToken);

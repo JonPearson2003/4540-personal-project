@@ -47,7 +47,7 @@ public partial class UsersViewModel(UsersApiService api) : ObservableObject
 	}
 
 	[RelayCommand]
-	private static Task AddAsync() => Shell.Current.GoToAsync(nameof(AddUsersPage));
+	private static Task AddAsync() => Shell.Current.GoToAsync(nameof(CreateUsersPage));
 
 	[RelayCommand]
 	private static Task EditAsync(UsersDto? item) =>

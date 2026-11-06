@@ -1,7 +1,9 @@
 using BuildTrack.Api.Data;
 using BuildTrack.Api.Entities;
+using BuildTrack.Api.Security;
 using BuildTrack.Contracts.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BuildTrack.Api.Endpoints;
@@ -26,7 +28,7 @@ public static class BuildTrackEndpoints
 		var items = await database.Users.AsNoTracking()
 			.OrderBy(item => item.Name)
 			.Select(item => new UsersDto(
-				item.UserId, item.Name, item.Email, item.Password, item.Role))
+				item.UserId, item.Name, item.Email, item.Role))
 			.ToListAsync(cancellationToken);
 		return TypedResults.Ok(items);
 	}
@@ -39,7 +41,7 @@ public static class BuildTrackEndpoints
 		var item = await database.Users.AsNoTracking()
 			.Where(item => item.UserId == id)
 			.Select(item => new UsersDto(
-				item.UserId, item.Name, item.Email, item.Password, item.Role))
+				item.UserId, item.Name, item.Email, item.Role))
 			.SingleOrDefaultAsync(cancellationToken);
 		return item is null ? TypedResults.NotFound() : TypedResults.Ok(item);
 	}
@@ -58,11 +60,12 @@ public static class BuildTrackEndpoints
 	// }
 
 	private static async Task<Results<Created<UsersDto>, ValidationProblem>> CreateUserAsync(
-		UpsertUsersRequest request,
+		CreateUserRequest request,
 		BuildTrackDbContext database,
+		IPasswordHasher<Users> passwordHasher,
 		CancellationToken cancellationToken)
 	{
-		var validationProblem = ValidateUserEmail(request);
+		var validationProblem = ValidateUserEmail(request.Email);
 		if (validationProblem is not null)
 			return validationProblem;
 
@@ -70,9 +73,10 @@ public static class BuildTrackEndpoints
 		{
 			Name = request.Name.Trim(),
 			Email = request.Email.Trim(),
-			Password = request.Password.Trim(),
+			Password = string.Empty,
 			Role = request.Role.Trim()
 		};
+		entity.Password = UserPasswordHashing.Hash(entity, request.Password, passwordHasher);
 		database.Users.Add(entity);
 		await database.SaveChangesAsync(cancellationToken);
 
@@ -82,11 +86,11 @@ public static class BuildTrackEndpoints
 
 	private static async Task<Results<NoContent, NotFound, ValidationProblem>> UpdateUserAsync(
 		int id,
-		UpsertUsersRequest request,
+		UpdateUserRequest request,
 		BuildTrackDbContext database,
 		CancellationToken cancellationToken)
 	{
-		var validationProblem = ValidateUserEmail(request);
+		var validationProblem = ValidateUserEmail(request.Email);
 		if (validationProblem is not null)
 			return validationProblem;
 
@@ -96,7 +100,6 @@ public static class BuildTrackEndpoints
 
 		entity.Name = request.Name.Trim();
 		entity.Email = request.Email.Trim();
-		entity.Password = request.Password.Trim();
 		entity.Role = request.Role.Trim();
 		await database.SaveChangesAsync(cancellationToken);
 		return TypedResults.NoContent();
@@ -116,14 +119,14 @@ public static class BuildTrackEndpoints
 		return TypedResults.NoContent();
 	}
 
-	private static ValidationProblem? ValidateUserEmail(UpsertUsersRequest request) =>
-		request.Email == default
+	private static ValidationProblem? ValidateUserEmail(string email) =>
+		email == default
 			? TypedResults.ValidationProblem(new Dictionary<string, string[]>
 			{
-				[nameof(request.Email)] = ["An email is required."]
+				[nameof(CreateUserRequest.Email)] = ["An email is required."]
 			})
 			: null;
 
 	private static UsersDto ToDto(Users item) =>
-		new(item.UserId, item.Name, item.Email, item.Password, item.Role);
+		new(item.UserId, item.Name, item.Email, item.Role);
 }

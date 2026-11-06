@@ -45,7 +45,7 @@
 						<Border Margin="0,0,0,10" Padding="14"
 								Background="White" Stroke="#CBD5E1"
 								StrokeShape="RoundRectangle 8">
-							<Grid RowDefinitions="Auto,Auto,Auto"
+							<Grid RowDefinitions="Auto,Auto,Auto,Auto"
 								  ColumnDefinitions="*,Auto"
 								  ColumnSpacing="12" RowSpacing="8">
 								<Label FontAttributes="Bold" FontSize="18"
@@ -56,12 +56,9 @@
 									   Text="{Binding Email, StringFormat='Email: {0}'}"
 									   TextColor="#52606D" />
                                 <Label Grid.Row="2" Grid.ColumnSpan="2"
-                                        Text="{Binding Password, StringFormat='Password: {0}'}"
-                                        TextColor="#52606D" />
-                                <Label Grid.Row="3" Grid.ColumnSpan="2"
                                         Text="{Binding Role, StringFormat='Role: {0}'}"
                                         TextColor="#52606D" />
-								<HorizontalStackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="8">
+								<HorizontalStackLayout Grid.Row="3" Grid.ColumnSpan="2" Spacing="8">
 									<Button Background="#006D77" Text="Edit" TextColor="White"
 											Command="{Binding Source={RelativeSource AncestorType={x:Type vm:UsersViewModel}}, Path=EditCommand}"
 											CommandParameter="{Binding .}" />

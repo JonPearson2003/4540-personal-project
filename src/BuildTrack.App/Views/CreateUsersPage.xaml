@@ -22,7 +22,8 @@
                        Text="{Binding Email, Mode=TwoWay}" TextColor="#17202A" />
 				<Label Text="Password" TextColor="#17202A" />
 				<Entry AutomationId="AddPasswordEntry" Background="White"
-					   Placeholder="Example: ********" PlaceholderColor="#52606D"
+					   IsPassword="True" Placeholder="Enter a password"
+					   PlaceholderColor="#52606D"
                        Text="{Binding Password, Mode=TwoWay}" TextColor="#17202A" />
 				<Label Text="Role" TextColor="#17202A" />
 				<Entry AutomationId="AddRoleEntry" Background="White"
