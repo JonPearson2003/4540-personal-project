@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+	x:Class="BuildTrack.App.Views.UsersPage"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:contracts="clr-namespace:BuildTrack.Contracts.Models;assembly=BuildTrack.Contracts"
+	xmlns:vm="clr-namespace:BuildTrack.App.ViewModels"
+	x:DataType="vm:UsersViewModel"
+	Background="#F7F8FA"
+	Title="Users">
+
+	<Grid Padding="16" RowDefinitions="Auto,Auto,*,Auto" RowSpacing="12">
+		<Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+			<VerticalStackLayout Spacing="2">
+				<Label FontAttributes="Bold" FontSize="24"
+					   Text="Users" TextColor="#17202A" />
+				<Label Text="Data from the remote API" TextColor="#52606D" />
+			</VerticalStackLayout>
+			<Button Grid.Column="1" AutomationId="AddUserButton"
+					Background="#006D77" Command="{Binding AddCommand}"
+					Text="Add" TextColor="White" />
+		</Grid>
+
+		<Label Grid.Row="1" AutomationId="ListErrorLabel"
+			   IsVisible="{Binding HasError}" Text="{Binding ErrorMessage}"
+			   TextColor="#B42318" />
+
+		<RefreshView Grid.Row="2" Command="{Binding LoadCommand}"
+					 IsRefreshing="{Binding IsBusy}">
+			<CollectionView AutomationId="UsersCollection"
+							ItemsSource="{Binding Users}"
+							SelectionMode="None">
+				<CollectionView.EmptyView>
+					<VerticalStackLayout Padding="24" Spacing="8"
+										 HorizontalOptions="Center"
+										 VerticalOptions="Center">
+						<Label FontAttributes="Bold" Text="No users yet"
+							   TextColor="#17202A" />
+						<Label Text="Use Add to create the first user."
+							   TextColor="#52606D" />
+					</VerticalStackLayout>
+				</CollectionView.EmptyView>
+				<CollectionView.ItemTemplate>
+					<DataTemplate x:DataType="contracts:UsersDto">
+						<Border Margin="0,0,0,10" Padding="14"
+								Background="White" Stroke="#CBD5E1"
+								StrokeShape="RoundRectangle 8">
+							<Grid RowDefinitions="Auto,Auto,Auto"
+								  ColumnDefinitions="*,Auto"
+								  ColumnSpacing="12" RowSpacing="8">
+								<Label FontAttributes="Bold" FontSize="18"
+									   Text="{Binding Name}" TextColor="#17202A" />
+								<!-- <CheckBox Grid.Column="1" IsEnabled="False"
+										  IsChecked="{Binding IsCompleted, Mode=OneWay}" /> -->
+								<Label Grid.Row="1" Grid.ColumnSpan="2"
+									   Text="{Binding Email, StringFormat='Email: {0}'}"
+									   TextColor="#52606D" />
+                                <Label Grid.Row="2" Grid.ColumnSpan="2"
+                                        Text="{Binding Password, StringFormat='Password: {0}'}"
+                                        TextColor="#52606D" />
+                                <Label Grid.Row="3" Grid.ColumnSpan="2"
+                                        Text="{Binding Role, StringFormat='Role: {0}'}"
+                                        TextColor="#52606D" />
+								<HorizontalStackLayout Grid.Row="4" Grid.ColumnSpan="2" Spacing="8">
+									<Button Background="#006D77" Text="Edit" TextColor="White"
+											Command="{Binding Source={RelativeSource AncestorType={x:Type vm:UsersViewModel}}, Path=EditCommand}"
+											CommandParameter="{Binding .}" />
+									<Button Background="#B42318" Text="Delete" TextColor="White"
+											Command="{Binding Source={RelativeSource AncestorType={x:Type vm:UsersViewModel}}, Path=DeleteCommand}"
+											CommandParameter="{Binding .}" />
+								</HorizontalStackLayout>
+							</Grid>
+						</Border>
+					</DataTemplate>
+				</CollectionView.ItemTemplate>
+			</CollectionView>
+		</RefreshView>
+
+		<ActivityIndicator Grid.Row="3" Color="#006D77"
+						   IsRunning="{Binding IsBusy}"
+						   IsVisible="{Binding IsBusy}" />
+	</Grid>
+</ContentPage>

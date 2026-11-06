@@ -1,16 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace BuildTrack.App;
+﻿namespace BuildTrack.App;
 
 public partial class App : Application
 {
-	public App()
+	private readonly AppShell appShell;
+
+	public App(AppShell appShell)
 	{
 		InitializeComponent();
+		this.appShell = appShell;
 	}
 
-	protected override Window CreateWindow(IActivationState? activationState)
-	{
-		return new Window(new AppShell());
-	}
+	protected override Window CreateWindow(IActivationState? activationState) => new(appShell);
 }

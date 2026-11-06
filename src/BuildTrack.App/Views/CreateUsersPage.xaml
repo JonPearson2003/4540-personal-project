@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+	x:Class="BuildTrack.App.Views.CreateUsersPage"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:vm="clr-namespace:BuildTrack.App.ViewModels"
+	x:DataType="vm:CreateUsersViewModel"
+	Background="#F7F8FA"
+	Title="Add user">
+	<Grid>
+		<ScrollView>
+			<VerticalStackLayout Padding="20" Spacing="14">
+				<Label FontAttributes="Bold" FontSize="24"
+					   Text="New user" TextColor="#17202A" />
+				<Label Text="Name" TextColor="#17202A" />
+				<Entry AutomationId="AddNameEntry" Background="White"
+					   Placeholder="Example: John Doe" PlaceholderColor="#52606D"
+                       Text="{Binding Name, Mode=TwoWay}" TextColor="#17202A" />
+				<Label Text="Email" TextColor="#17202A" />
+				<Entry AutomationId="AddEmailEntry" Background="White"
+					   Placeholder="Example: john.doe@example.com" PlaceholderColor="#52606D"
+                       Text="{Binding Email, Mode=TwoWay}" TextColor="#17202A" />
+				<Label Text="Password" TextColor="#17202A" />
+				<Entry AutomationId="AddPasswordEntry" Background="White"
+					   Placeholder="Example: ********" PlaceholderColor="#52606D"
+                       Text="{Binding Password, Mode=TwoWay}" TextColor="#17202A" />
+				<Label Text="Role" TextColor="#17202A" />
+				<Entry AutomationId="AddRoleEntry" Background="White"
+					   Placeholder="worker or manager" PlaceholderColor="#52606D"
+                       Text="{Binding Role, Mode=TwoWay}" TextColor="#17202A" />
+				<!-- <Label Text="Due date" TextColor="#17202A" /> -->
+				<!-- <DatePicker AutomationId="AddDueDatePicker" Background="White"
+							Date="{Binding DueDate, Mode=TwoWay}" TextColor="#17202A" /> -->
+				<!-- <HorizontalStackLayout Spacing="8">
+					<CheckBox AutomationId="AddCompletedCheckBox"
+							  IsChecked="{Binding IsCompleted, Mode=TwoWay}" />
+					<Label Text="Completed" TextColor="#17202A"
+						   VerticalOptions="Center" />
+				</HorizontalStackLayout> -->
+				<Label AutomationId="AddErrorLabel" IsVisible="{Binding HasError}"
+					   Text="{Binding ErrorMessage}" TextColor="#B42318" />
+				<Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+					<Button AutomationId="SaveNewUserButton"
+							Background="#006D77" Command="{Binding SaveCommand}"
+							Text="Save" TextColor="White" />
+					<Button Grid.Column="1" Background="#E2E8F0"
+							Command="{Binding CancelCommand}" Text="Cancel"
+							TextColor="#17202A" />
+				</Grid>
+				<ActivityIndicator Color="#006D77" IsRunning="{Binding IsBusy}"
+								   IsVisible="{Binding IsBusy}" />
+			</VerticalStackLayout>
+		</ScrollView>
+	</Grid>
+</ContentPage>

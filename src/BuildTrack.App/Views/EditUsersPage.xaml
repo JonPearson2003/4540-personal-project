@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+	x:Class="BuildTrack.App.Views.EditUsersPage"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:vm="clr-namespace:BuildTrack.App.ViewModels"
+	x:DataType="vm:EditUsersViewModel"
+	Background="#F7F8FA"
+	Title="Edit user">
+	<Grid>
+		<ScrollView>
+			<VerticalStackLayout Padding="20" Spacing="14">
+				<Label FontAttributes="Bold" FontSize="24"
+					   Text="Edit user" TextColor="#17202A" />
+				<Label Text="{Binding UserId, StringFormat='User #{0}'}"
+					   TextColor="#52606D" />
+				<Label Text="Name" TextColor="#17202A" />
+				<Entry AutomationId="EditNameEntry" Background="White"
+					   Placeholder="User name" PlaceholderColor="#52606D"
+					   Text="{Binding Name, Mode=TwoWay}" TextColor="#17202A" />
+				<Label Text="Email" TextColor="#17202A" />
+				<Entry AutomationId="EditEmailEntry" Background="White"
+					   Placeholder="User email" PlaceholderColor="#52606D"
+					   Text="{Binding Email, Mode=TwoWay}" TextColor="#17202A" />
+				<Label Text="Password" TextColor="#17202A" />
+				<Entry AutomationId="EditPasswordEntry" Background="White"
+					   Placeholder="User password" PlaceholderColor="#52606D"
+					   Text="{Binding Password, Mode=TwoWay}" TextColor="#17202A" />
+				<Label Text="Role" TextColor="#17202A" />
+				<Entry AutomationId="EditRoleEntry" Background="White"
+					   Placeholder="User role" PlaceholderColor="#52606D"
+					   Text="{Binding Role, Mode=TwoWay}" TextColor="#17202A" />
+				</HorizontalStackLayout>
+				<Label AutomationId="EditErrorLabel" IsVisible="{Binding HasError}"
+					   Text="{Binding ErrorMessage}" TextColor="#B42318" />
+				<Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+					<Button AutomationId="SaveEditedAssignmentButton"
+							Background="#006D77" Command="{Binding SaveCommand}"
+							Text="Update" TextColor="White" />
+					<Button Grid.Column="1" Background="#E2E8F0"
+							Command="{Binding CancelCommand}" Text="Cancel"
+							TextColor="#17202A" />
+				</Grid>
+				<ActivityIndicator Color="#006D77" IsRunning="{Binding IsBusy}"
+								   IsVisible="{Binding IsBusy}" />
+			</VerticalStackLayout>
+		</ScrollView>
+	</Grid>
+</ContentPage>
