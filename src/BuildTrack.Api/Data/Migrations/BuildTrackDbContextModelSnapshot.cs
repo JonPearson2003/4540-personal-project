@@ -15,12 +15,79 @@ partial class BuildTrackDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261106005056_InitialCreate";
+    public override string LastMigrationId => "20261112162757_week3_models";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
 #pragma warning disable 612, 618
         modelBuilder.HasAnnotation("ProductVersion", "11.0.0-rc.3.26522.148");
+
+        modelBuilder.Entity("BuildTrack.Api.Entities.MaterialRequest", b =>
+            {
+                b.Property<int>("ProjectId")
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("RequestedByUserId")
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("MaterialId")
+                    .HasColumnType("INTEGER");
+
+                b.Property<DateTime>("RequestedAt")
+                    .HasColumnType("TEXT");
+
+                b.HasKey("ProjectId", "RequestedByUserId", "MaterialId");
+
+                b.HasIndex("MaterialId");
+
+                b.HasIndex("RequestedByUserId");
+
+                b.ToTable("MaterialRequests");
+            });
+
+        modelBuilder.Entity("BuildTrack.Api.Entities.MaterialUsage", b =>
+            {
+                b.Property<int>("ProjectId")
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("UserId")
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("MaterialId")
+                    .HasColumnType("INTEGER");
+
+                b.Property<DateTime>("AssignedAt")
+                    .HasColumnType("TEXT");
+
+                b.Property<int>("QuantityUsed")
+                    .HasColumnType("INTEGER");
+
+                b.HasKey("ProjectId", "UserId", "MaterialId");
+
+                b.HasIndex("MaterialId");
+
+                b.HasIndex("UserId");
+
+                b.ToTable("MaterialUsages");
+            });
+
+        modelBuilder.Entity("BuildTrack.Api.Entities.ProjectAssignment", b =>
+            {
+                b.Property<int>("ProjectId")
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("UserId")
+                    .HasColumnType("INTEGER");
+
+                b.Property<DateTime>("AssignedAt")
+                    .HasColumnType("TEXT");
+
+                b.HasKey("ProjectId", "UserId");
+
+                b.HasIndex("UserId");
+
+                b.ToTable("ProjectAssignments");
+            });
 
         modelBuilder.Entity("BuildTrack.Api.Entities.ProjectMaterials", b =>
             {
@@ -108,6 +175,34 @@ partial class BuildTrackDbContextModelSnapshot : ModelSnapshot
                 b.ToTable("Projects");
             });
 
+        modelBuilder.Entity("BuildTrack.Api.Entities.RecieptInvoice", b =>
+            {
+                b.Property<int>("ProjectId")
+                    .HasColumnType("INTEGER");
+
+                b.Property<int>("UserId")
+                    .HasColumnType("INTEGER");
+
+                b.Property<string>("Vendor")
+                    .HasColumnType("TEXT");
+
+                b.Property<double>("Amount")
+                    .HasColumnType("REAL");
+
+                b.Property<byte[]>("InvoiceImage")
+                    .IsRequired()
+                    .HasColumnType("BLOB");
+
+                b.Property<DateTime>("purchaseDate")
+                    .HasColumnType("TEXT");
+
+                b.HasKey("ProjectId", "UserId", "Vendor");
+
+                b.HasIndex("UserId");
+
+                b.ToTable("RecieptInvoices");
+            });
+
         modelBuilder.Entity("BuildTrack.Api.Entities.TimeRecords", b =>
             {
                 b.Property<int>("TimeRecordId")
@@ -119,6 +214,9 @@ partial class BuildTrackDbContextModelSnapshot : ModelSnapshot
 
                 b.Property<DateTime>("EndTime")
                     .HasColumnType("TEXT");
+
+                b.Property<int>("ProjectId")
+                    .HasColumnType("INTEGER");
 
                 b.Property<DateTime>("StartTime")
                     .HasColumnType("TEXT");
@@ -160,6 +258,63 @@ partial class BuildTrackDbContextModelSnapshot : ModelSnapshot
                 b.ToTable("Users");
             });
 
+        modelBuilder.Entity("BuildTrack.Api.Entities.MaterialRequest", b =>
+            {
+                b.HasOne("BuildTrack.Api.Entities.ProjectMaterials", null)
+                    .WithMany()
+                    .HasForeignKey("MaterialId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("BuildTrack.Api.Entities.Projects", null)
+                    .WithMany()
+                    .HasForeignKey("ProjectId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("BuildTrack.Api.Entities.Users", null)
+                    .WithMany()
+                    .HasForeignKey("RequestedByUserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
+
+        modelBuilder.Entity("BuildTrack.Api.Entities.MaterialUsage", b =>
+            {
+                b.HasOne("BuildTrack.Api.Entities.ProjectMaterials", null)
+                    .WithMany()
+                    .HasForeignKey("MaterialId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("BuildTrack.Api.Entities.Projects", null)
+                    .WithMany()
+                    .HasForeignKey("ProjectId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("BuildTrack.Api.Entities.Users", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
+
+        modelBuilder.Entity("BuildTrack.Api.Entities.ProjectAssignment", b =>
+            {
+                b.HasOne("BuildTrack.Api.Entities.Projects", null)
+                    .WithMany()
+                    .HasForeignKey("ProjectId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("BuildTrack.Api.Entities.Users", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
+
         modelBuilder.Entity("BuildTrack.Api.Entities.ProjectMaterials", b =>
             {
                 b.HasOne("BuildTrack.Api.Entities.Projects", null)
@@ -174,6 +329,21 @@ partial class BuildTrackDbContextModelSnapshot : ModelSnapshot
                 b.HasOne("BuildTrack.Api.Entities.Projects", null)
                     .WithMany()
                     .HasForeignKey("ProjectId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
+
+        modelBuilder.Entity("BuildTrack.Api.Entities.RecieptInvoice", b =>
+            {
+                b.HasOne("BuildTrack.Api.Entities.Projects", null)
+                    .WithMany()
+                    .HasForeignKey("ProjectId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("BuildTrack.Api.Entities.Users", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
             });
