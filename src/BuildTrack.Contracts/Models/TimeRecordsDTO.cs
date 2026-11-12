@@ -3,8 +3,8 @@ namespace BuildTrack.Contracts.Models;
 public sealed record TimeRecordDto(
 	int TimeRecordId,
 	int UserId,
-    int ProjectId,
+	int? ProjectId,
 	DateTime StartTime,
-	DateTime EndTime,
-	TimeSpan Duration
+	DateTime? EndTime,
+	TimeSpan? Duration
 );

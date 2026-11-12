@@ -1,10 +1,11 @@
 namespace BuildTrack.Contracts.Models;
 
-public sealed record RecieptInvoiceDto(
+public sealed record ReceiptInvoiceDto(
+	int ReceiptInvoiceId,
 	int ProjectId,
 	int UserId,
 	string Vendor,
-	double Amount,
+	decimal Amount,
 	DateTime PurchaseDate,
 	byte[] InvoiceImage
 );
