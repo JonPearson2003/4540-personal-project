@@ -18,6 +18,12 @@ public static class BuildTrackEndpoints
 		group.MapPost("/users", CreateUserAsync);
 		group.MapPut("/users/{id:int}", UpdateUserAsync);
 		group.MapDelete("/users/{id:int}", DeleteUserAsync);
+        
+        group.MapGet("/projects", GetAllProjectsAsync);
+        group.MapGet("/projects/{id:int}", GetByProjectIdAsync).WithName(nameof(GetByProjectIdAsync));
+        group.MapPost("/projects", CreateProjectAsync);
+        group.MapPut("/projects/{id:int}", UpdateProjectAsync);
+        group.MapDelete("/projects/{id:int}", DeleteProjectAsync);
 		return app;
 	}
 
