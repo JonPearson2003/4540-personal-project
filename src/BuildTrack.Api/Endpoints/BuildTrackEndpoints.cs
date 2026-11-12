@@ -80,7 +80,7 @@ public static class BuildTrackEndpoints
 		database.Users.Add(entity);
 		await database.SaveChangesAsync(cancellationToken);
 
-		var result = ToDto(entity);
+		var result = ToUserDto(entity);
 		return TypedResults.Created($"/api/users/{entity.UserId}", result);
 	}
 
@@ -127,6 +127,104 @@ public static class BuildTrackEndpoints
 			})
 			: null;
 
-	private static UsersDto ToDto(Users item) =>
+	private static UsersDto ToUserDto(Users item) =>
 		new(item.UserId, item.Name, item.Email, item.Role);
+
+    	private static async Task<Ok<List<ProjectDto>>> GetAllProjectsAsync(
+		BuildTrackDbContext database,
+		CancellationToken cancellationToken)
+	{
+		var projects = await database.Projects.AsNoTracking()
+			.OrderBy(project => project.Name)
+			.Select(project => new ProjectDto(
+				project.ProjectId, project.Name, project.Description, project.Location, project.StartDate, project.EndDate))
+			.ToListAsync(cancellationToken);
+		return TypedResults.Ok(projects);
+	}
+
+    	private static async Task<Results<Ok<ProjectDto>, NotFound>> GetByProjectIdAsync(
+		int id,
+		BuildTrackDbContext database,
+		CancellationToken cancellationToken)
+	{
+		var item = await database.Projects.AsNoTracking()
+			.Where(item => item.ProjectId == id)
+			.Select(item => new ProjectDto(
+				item.ProjectId, item.Name, item.Description, item.Location, item.StartDate, item.EndDate))
+			.SingleOrDefaultAsync(cancellationToken);
+		return item is null ? TypedResults.NotFound() : TypedResults.Ok(item);
+	}
+
+    	private static async Task<Results<Created<ProjectDto>, ValidationProblem>> CreateProjectAsync(
+		CreateProjectRequest request,
+		BuildTrackDbContext database,
+		CancellationToken cancellationToken)
+	{
+
+		var entity = new Projects
+		{
+			Name = request.Name.Trim(),
+			Description = request.Description.Trim(),
+			Location = request.Location.Trim(),
+			StartDate = request.StartDate,
+			EndDate = request.EndDate
+		};
+		database.Projects.Add(entity);
+		await database.SaveChangesAsync(cancellationToken);
+
+		var result = ToProjectDto(entity);
+		return TypedResults.Created($"/api/projects/{entity.ProjectId}", result);
+	}
+
+    	private static async Task<Results<NoContent, NotFound, ValidationProblem>> UpdateProjectAsync(
+		int id,
+		UpdateProjectRequest request,
+		BuildTrackDbContext database,
+		CancellationToken cancellationToken)
+	{
+		var validationProblem = ValidateProjectName(request.Name);
+		if (validationProblem is not null)
+			return validationProblem;
+
+		var entity = await database.Projects.FindAsync([id], cancellationToken);
+		if (entity is null)
+			return TypedResults.NotFound();
+
+		entity.Name = request.Name.Trim();
+		entity.Description = request.Description.Trim();
+		entity.Location = request.Location.Trim();
+		entity.StartDate = request.StartDate;
+		entity.EndDate = request.EndDate;
+		await database.SaveChangesAsync(cancellationToken);
+		return TypedResults.NoContent();
+	}
+
+    	private static async Task<Results<NoContent, NotFound>> DeleteProjectAsync(
+		int id,
+		BuildTrackDbContext database,
+		CancellationToken cancellationToken)
+	{
+		var entity = await database.Projects.FindAsync([id], cancellationToken);
+		if (entity is null)
+			return TypedResults.NotFound();
+
+		database.Projects.Remove(entity);
+		await database.SaveChangesAsync(cancellationToken);
+		return TypedResults.NoContent();
+	}
+
+    	private static ProjectDto ToProjectDto(Projects item) =>
+		new(item.ProjectId, item.Name, item.Description, item.Location, item.StartDate, item.EndDate);
+
+    	private static ValidationProblem? ValidateProjectName(string name) =>
+		name.Length < 2 || name.Length > 100
+			? TypedResults.ValidationProblem(new Dictionary<string, string[]>
+				{
+					{ nameof(CreateProjectRequest.Name), new[] { "Name must be between 2 and 100 characters." } }
+				})
+			: null;
+
+
+        
+
 }
