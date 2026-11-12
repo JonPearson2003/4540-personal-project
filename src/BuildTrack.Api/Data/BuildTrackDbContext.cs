@@ -11,6 +11,10 @@ public sealed class BuildTrackDbContext(DbContextOptions<BuildTrackDbContext> op
 	public DbSet<ProjectStatus> ProjectStatuses => Set<ProjectStatus>();
 	public DbSet<TimeRecords> TimeRecords => Set<TimeRecords>();
 	public DbSet<ProjectMaterials> ProjectMaterials => Set<ProjectMaterials>();
+    public DbSet<ProjectAssignment> ProjectAssignments => Set<ProjectAssignment>();
+    public DbSet<MaterialRequest> MaterialRequests => Set<MaterialRequest>();
+    public DbSet<MaterialUsage> MaterialUsages => Set<MaterialUsage>();
+    public DbSet<RecieptInvoice> RecieptInvoices => Set<RecieptInvoice>();
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -57,5 +61,55 @@ public sealed class BuildTrackDbContext(DbContextOptions<BuildTrackDbContext> op
 				.WithMany()
 				.HasForeignKey(material => material.ProjectId);
 		});
+
+        modelBuilder.Entity<ProjectAssignment>(entity =>
+        {
+            entity.HasKey(pa => new { pa.ProjectId, pa.UserId });
+            entity.HasOne<Projects>()
+                .WithMany()
+                .HasForeignKey(pa => pa.ProjectId);
+            entity.HasOne<Users>()
+                .WithMany()
+                .HasForeignKey(pa => pa.UserId);
+        });
+
+        modelBuilder.Entity<MaterialRequest>(entity =>
+        {
+            entity.HasKey(mr => new { mr.ProjectId, mr.RequestedByUserId, mr.MaterialId });
+            entity.HasOne<Projects>()
+                .WithMany()
+                .HasForeignKey(mr => mr.ProjectId);
+            entity.HasOne<Users>()
+                .WithMany()
+                .HasForeignKey(mr => mr.RequestedByUserId);
+            entity.HasOne<ProjectMaterials>()
+                .WithMany()
+                .HasForeignKey(mr => mr.MaterialId);
+        });
+
+        modelBuilder.Entity<MaterialUsage>(entity =>
+        {
+            entity.HasKey(mu => new { mu.ProjectId, mu.UserId, mu.MaterialId });
+            entity.HasOne<Projects>()
+                .WithMany()
+                .HasForeignKey(mu => mu.ProjectId);
+            entity.HasOne<Users>()
+                .WithMany()
+                .HasForeignKey(mu => mu.UserId);
+            entity.HasOne<ProjectMaterials>()
+                .WithMany()
+                .HasForeignKey(mu => mu.MaterialId);
+        });
+
+        modelBuilder.Entity<RecieptInvoice>(entity =>
+        {
+            entity.HasKey(ri => new { ri.ProjectId, ri.UserId, ri.Vendor });
+            entity.HasOne<Projects>()
+                .WithMany()
+                .HasForeignKey(ri => ri.ProjectId);
+            entity.HasOne<Users>()
+                .WithMany()
+                .HasForeignKey(ri => ri.UserId);
+        });
 	}
 }
