@@ -1,5 +1,6 @@
-namespace BuildTrack.Contracts.Models;
+using System.ComponentModel.DataAnnotations;
 
+namespace BuildTrack.Contracts.Models;
 public sealed class UpdateProjectRequest
 {
 	[Required]

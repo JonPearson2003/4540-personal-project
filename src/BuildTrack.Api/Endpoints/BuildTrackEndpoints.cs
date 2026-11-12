@@ -24,6 +24,12 @@ public static class BuildTrackEndpoints
         group.MapPost("/projects", CreateProjectAsync);
         group.MapPut("/projects/{id:int}", UpdateProjectAsync);
         group.MapDelete("/projects/{id:int}", DeleteProjectAsync);
+
+        group.MapGet("/timerecords", GetAllTimeRecordsAsync);
+        group.MapGet("/timerecords/{id:int}", GetByTimeRecordIdAsync).WithName(nameof(GetByTimeRecordIdAsync));
+        group.MapPost("/timerecords", CreateTimeRecordAsync);
+        group.MapPut("/timerecords/{id:int}", UpdateTimeRecordAsync);
+        group.MapDelete("/timerecords/{id:int}", DeleteTimeRecordAsync);
 		return app;
 	}
 
@@ -231,6 +237,99 @@ public static class BuildTrackEndpoints
 			: null;
 
 
-        
+        private static async Task<Ok<List<TimeRecordDto>>> GetAllTimeRecordsAsync(
+		BuildTrackDbContext database,
+		CancellationToken cancellationToken)
+	{
+		var timeRecords = await database.TimeRecords.AsNoTracking()
+			.OrderBy(project => project.TimeRecordId)
+			.Select(project => new TimeRecordDto(
+				project.TimeRecordId, project.UserId,project.ProjectId, project.StartTime, project.EndTime, project.Duration))
+			.ToListAsync(cancellationToken);
+		return TypedResults.Ok(timeRecords);
+	}
+
+        private static async Task<Results<Ok<TimeRecordDto>, NotFound>> GetByTimeRecordIdAsync(
+		int id,
+		BuildTrackDbContext database,
+		CancellationToken cancellationToken)
+	{
+		var timeRecords = await database.TimeRecords.AsNoTracking()
+			.Where(item => item.TimeRecordId == id)
+			.Select(item => new TimeRecordDto(
+				item.TimeRecordId, item.UserId, item.ProjectId, item.StartTime, item.EndTime, item.Duration))
+			.SingleOrDefaultAsync(cancellationToken);
+		return timeRecords is null ? TypedResults.NotFound() : TypedResults.Ok(timeRecords);
+	}
+
+    	private static async Task<Results<Created<TimeRecordDto>, ValidationProblem>> CreateTimeRecordAsync(
+		CreateTimeRecordRequest request,
+		BuildTrackDbContext database,
+		CancellationToken cancellationToken)
+	{
+
+		var entity = new TimeRecords
+		{
+			UserId = request.UserId,
+			ProjectId = request.ProjectId,
+			StartTime = request.StartTime,
+			EndTime = request.EndTime,
+			Duration = request.Duration
+		};
+		database.TimeRecords.Add(entity);
+		await database.SaveChangesAsync(cancellationToken);
+
+		var result = ToTimeRecordDto(entity);
+		return TypedResults.Created($"/api/timerecords/{entity.TimeRecordId}", result);
+	}
+
+    	private static async Task<Results<NoContent, NotFound, ValidationProblem>> UpdateTimeRecordAsync(
+		int id,
+		UpdateTimeRecordRequest request,
+		BuildTrackDbContext database,
+		CancellationToken cancellationToken)
+	{
+		var validationProblem = ValidateTimeRecordDuration(request.Duration);
+		if (validationProblem is not null)
+			return validationProblem;
+
+		var entity = await database.TimeRecords.FindAsync([id], cancellationToken);
+		if (entity is null)
+			return TypedResults.NotFound();
+
+		entity.ProjectId = request.ProjectId;
+		entity.StartTime = request.StartTime;
+		entity.EndTime = request.EndTime;
+		entity.Duration = request.Duration;
+		await database.SaveChangesAsync(cancellationToken);
+		return TypedResults.NoContent();
+	}
+
+        private static async Task<Results<NoContent, NotFound>> DeleteTimeRecordAsync(
+		int id,
+		BuildTrackDbContext database,
+		CancellationToken cancellationToken)
+	{
+		var entity = await database.TimeRecords.FindAsync([id], cancellationToken);
+		if (entity is null)
+			return TypedResults.NotFound();
+
+		database.TimeRecords.Remove(entity);
+		await database.SaveChangesAsync(cancellationToken);
+		return TypedResults.NoContent();
+	}
+
+
+    	private static TimeRecordDto ToTimeRecordDto(TimeRecords item) =>
+		new(item.TimeRecordId, item.UserId, item.ProjectId, item.StartTime, item.EndTime, item.Duration);
+
+    //  Validates Timespan is not negative or zero. Returns a ValidationProblem if invalid, otherwise null.
+    	private static ValidationProblem? ValidateTimeRecordDuration(TimeSpan duration) =>
+		duration > TimeSpan.FromMinutes(0)
+			? TypedResults.ValidationProblem(new Dictionary<string, string[]>
+				{
+					{ nameof(CreateTimeRecordRequest.Duration), new[] { "Duration must be a positive time span." } }
+				})
+			: null;
 
 }
