@@ -1,11 +1,334 @@
-@BuildTrack.Api_HostAddress = http://localhost:5149
+@baseUrl = http://localhost:5149
 
-GET {{BuildTrack.Api_HostAddress}}/openapi/v1.json
+### OpenAPI document
+GET {{baseUrl}}/openapi/v1.json
 Accept: application/json
 
-###
-
-GET {{BuildTrack.Api_HostAddress}}/weatherforecast/
+### Weather forecast sample
+GET {{baseUrl}}/weatherforecast/
 Accept: application/json
 
-###
+### Create a user
+# @name createUser
+POST {{baseUrl}}/api/buildtrack/users
+Content-Type: application/json
+
+{
+  "name": "Alex Worker",
+  "email": "alex.worker@example.com",
+  "password": "SecurePassword123!",
+  "role": "worker"
+}
+
+### List users
+GET {{baseUrl}}/api/buildtrack/users
+Accept: application/json
+
+### Get the created user
+GET {{baseUrl}}/api/buildtrack/users/{{createUser.response.body.$.userId}}
+Accept: application/json
+
+### Update a user (password is intentionally not part of this request)
+PUT {{baseUrl}}/api/buildtrack/users/{{createUser.response.body.$.userId}}
+Content-Type: application/json
+
+{
+  "name": "Alex Worker",
+  "email": "alex.worker@example.com",
+  "role": "manager"
+}
+
+### Create a project
+# @name createProject
+POST {{baseUrl}}/api/buildtrack/projects
+Content-Type: application/json
+
+{
+  "name": "Sample Build",
+  "description": "A sample project for testing the BuildTrack API.",
+  "location": "100 Main Street",
+  "startDate": "2026-11-12T08:00:00",
+  "endDate": "2027-02-12T17:00:00"
+}
+
+### List projects
+GET {{baseUrl}}/api/buildtrack/projects
+Accept: application/json
+
+### Get the created project
+GET {{baseUrl}}/api/buildtrack/projects/{{createProject.response.body.$.projectId}}
+Accept: application/json
+
+### Update a project
+PUT {{baseUrl}}/api/buildtrack/projects/{{createProject.response.body.$.projectId}}
+Content-Type: application/json
+
+{
+  "name": "Updated Sample Build",
+  "description": "An updated sample project for testing the BuildTrack API.",
+  "location": "100 Main Street",
+  "startDate": "2026-11-12T08:00:00",
+  "endDate": "2027-02-12T17:00:00"
+}
+
+### Create an in-progress time record
+# @name createTimeRecord
+POST {{baseUrl}}/api/buildtrack/timerecords
+Content-Type: application/json
+
+{
+  "userId": {{createUser.response.body.$.userId}},
+  "projectId": {{createProject.response.body.$.projectId}},
+  "startTime": "2026-11-12T08:00:00",
+  "endTime": null,
+  "duration": null
+}
+
+### List time records
+GET {{baseUrl}}/api/buildtrack/timerecords
+Accept: application/json
+
+### Get the created time record
+GET {{baseUrl}}/api/buildtrack/timerecords/{{createTimeRecord.response.body.$.timeRecordId}}
+Accept: application/json
+
+### Update a time record
+PUT {{baseUrl}}/api/buildtrack/timerecords/{{createTimeRecord.response.body.$.timeRecordId}}
+Content-Type: application/json
+
+{
+  "projectId": {{createProject.response.body.$.projectId}},
+  "startTime": "2026-11-12T08:00:00",
+  "endTime": "2026-11-12T16:00:00",
+  "duration": "08:00:00"
+}
+
+### Add a material to a project
+# @name createProjectMaterial
+POST {{baseUrl}}/api/buildtrack/projectmaterials
+Content-Type: application/json
+
+{
+  "projectId": {{createProject.response.body.$.projectId}},
+  "name": "Lumber",
+  "description": "2x4 framing lumber",
+  "price": 5.25,
+  "quantity": 100
+}
+
+### List project materials
+GET {{baseUrl}}/api/buildtrack/projectmaterials
+Accept: application/json
+
+### Get the created project material
+GET {{baseUrl}}/api/buildtrack/projectmaterials/{{createProjectMaterial.response.body.$.projectMaterialId}}
+Accept: application/json
+
+### Update a project material
+PUT {{baseUrl}}/api/buildtrack/projectmaterials/{{createProjectMaterial.response.body.$.projectMaterialId}}
+Content-Type: application/json
+
+{
+  "projectId": {{createProject.response.body.$.projectId}},
+  "name": "Lumber",
+  "description": "2x4 framing lumber",
+  "price": 5.5,
+  "quantity": 95
+}
+
+### Create a project status update; ProgressPhoto is a base64-encoded JSON byte array
+# @name createProjectStatus
+POST {{baseUrl}}/api/buildtrack/projectstatuses
+Content-Type: application/json
+
+{
+  "projectId": {{createProject.response.body.$.projectId}},
+  "progressPhoto": "",
+  "status": "Foundation complete",
+  "date": "2026-11-12T16:00:00"
+}
+
+### List project status updates
+GET {{baseUrl}}/api/buildtrack/projectstatuses
+Accept: application/json
+
+### Get the created project status
+GET {{baseUrl}}/api/buildtrack/projectstatuses/{{createProjectStatus.response.body.$.projectStatusId}}
+Accept: application/json
+
+### Update a project status update
+PUT {{baseUrl}}/api/buildtrack/projectstatuses/{{createProjectStatus.response.body.$.projectStatusId}}
+Content-Type: application/json
+
+{
+  "projectId": {{createProject.response.body.$.projectId}},
+  "progressPhoto": "",
+  "status": "Foundation inspected",
+  "date": "2026-11-12T17:00:00"
+}
+
+### Assign a user to a project
+# @name createProjectAssignment
+POST {{baseUrl}}/api/buildtrack/projectassignments
+Content-Type: application/json
+
+{
+  "projectId": {{createProject.response.body.$.projectId}},
+  "userId": {{createUser.response.body.$.userId}},
+  "assignedAt": "2026-11-12T08:00:00"
+}
+
+### List project assignments
+GET {{baseUrl}}/api/buildtrack/projectassignments
+Accept: application/json
+
+### Get the created project assignment
+GET {{baseUrl}}/api/buildtrack/projectassignments/{{createProject.response.body.$.projectId}}/{{createUser.response.body.$.userId}}
+
+### Update a project assignment
+PUT {{baseUrl}}/api/buildtrack/projectassignments/{{createProject.response.body.$.projectId}}/{{createUser.response.body.$.userId}}
+Content-Type: application/json
+
+{
+  "assignedAt": "2026-11-12T09:00:00"
+}
+
+### Create a material request
+# @name createMaterialRequest
+POST {{baseUrl}}/api/buildtrack/materialrequests
+Content-Type: application/json
+
+{
+  "projectId": {{createProject.response.body.$.projectId}},
+  "requestedByUserId": {{createUser.response.body.$.userId}},
+  "materialId": {{createProjectMaterial.response.body.$.projectMaterialId}},
+  "quantityRequested": 10,
+  "unit": "pieces",
+  "priority": "Normal",
+  "status": "Pending",
+  "notes": "Needed for framing",
+  "requestedAt": "2026-11-12T08:00:00",
+  "reviewedByUserId": null,
+  "reviewedAt": null
+}
+
+### List material requests
+GET {{baseUrl}}/api/buildtrack/materialrequests
+Accept: application/json
+
+### Get the created material request
+GET {{baseUrl}}/api/buildtrack/materialrequests/{{createMaterialRequest.response.body.$.materialRequestId}}
+Accept: application/json
+
+### Update a material request
+PUT {{baseUrl}}/api/buildtrack/materialrequests/{{createMaterialRequest.response.body.$.materialRequestId}}
+Content-Type: application/json
+
+{
+  "projectId": {{createProject.response.body.$.projectId}},
+  "requestedByUserId": {{createUser.response.body.$.userId}},
+  "materialId": {{createProjectMaterial.response.body.$.projectMaterialId}},
+  "quantityRequested": 12,
+  "unit": "pieces",
+  "priority": "High",
+  "status": "Approved",
+  "notes": "Approved for framing",
+  "requestedAt": "2026-11-12T08:00:00",
+  "reviewedByUserId": {{createUser.response.body.$.userId}},
+  "reviewedAt": "2026-11-12T10:00:00"
+}
+
+### Create a material usage record
+# @name createMaterialUsage
+POST {{baseUrl}}/api/buildtrack/materialusages
+Content-Type: application/json
+
+{
+  "projectId": {{createProject.response.body.$.projectId}},
+  "userId": {{createUser.response.body.$.userId}},
+  "materialId": {{createProjectMaterial.response.body.$.projectMaterialId}},
+  "quantityUsed": 2,
+  "usedAt": "2026-11-12T12:00:00"
+}
+
+### List material usage records
+GET {{baseUrl}}/api/buildtrack/materialusages
+Accept: application/json
+
+### Get the created material usage
+GET {{baseUrl}}/api/buildtrack/materialusages/{{createMaterialUsage.response.body.$.materialUsageId}}
+Accept: application/json
+
+### Update a material usage record
+PUT {{baseUrl}}/api/buildtrack/materialusages/{{createMaterialUsage.response.body.$.materialUsageId}}
+Content-Type: application/json
+
+{
+  "projectId": {{createProject.response.body.$.projectId}},
+  "userId": {{createUser.response.body.$.userId}},
+  "materialId": {{createProjectMaterial.response.body.$.projectMaterialId}},
+  "quantityUsed": 3,
+  "usedAt": "2026-11-12T13:00:00"
+}
+
+### Create a receipt invoice; InvoiceImage is a base64-encoded JSON byte array
+# @name createReceiptInvoice
+POST {{baseUrl}}/api/buildtrack/receiptinvoices
+Content-Type: application/json
+
+{
+  "projectId": {{createProject.response.body.$.projectId}},
+  "userId": {{createUser.response.body.$.userId}},
+  "vendor": "Build Supply Co.",
+  "amount": 52.50,
+  "purchaseDate": "2026-11-12T00:00:00",
+  "invoiceImage": ""
+}
+
+### List receipt invoices
+GET {{baseUrl}}/api/buildtrack/receiptinvoices
+Accept: application/json
+
+### Get the created receipt invoice
+GET {{baseUrl}}/api/buildtrack/receiptinvoices/{{createReceiptInvoice.response.body.$.receiptInvoiceId}}
+Accept: application/json
+
+### Update a receipt invoice
+PUT {{baseUrl}}/api/buildtrack/receiptinvoices/{{createReceiptInvoice.response.body.$.receiptInvoiceId}}
+Content-Type: application/json
+
+{
+  "projectId": {{createProject.response.body.$.projectId}},
+  "userId": {{createUser.response.body.$.userId}},
+  "vendor": "Build Supply Co.",
+  "amount": 52.50,
+  "purchaseDate": "2026-11-12T00:00:00",
+  "invoiceImage": ""
+}
+
+### Delete a receipt invoice
+DELETE {{baseUrl}}/api/buildtrack/receiptinvoices/{{createReceiptInvoice.response.body.$.receiptInvoiceId}}
+
+### Delete material usage before its material and project
+DELETE {{baseUrl}}/api/buildtrack/materialusages/{{createMaterialUsage.response.body.$.materialUsageId}}
+
+### Delete material request before its material and project
+DELETE {{baseUrl}}/api/buildtrack/materialrequests/{{createMaterialRequest.response.body.$.materialRequestId}}
+
+### Delete project status update before its project
+DELETE {{baseUrl}}/api/buildtrack/projectstatuses/{{createProjectStatus.response.body.$.projectStatusId}}
+
+### Delete time record before its user and project
+DELETE {{baseUrl}}/api/buildtrack/timerecords/{{createTimeRecord.response.body.$.timeRecordId}}
+
+### Remove project assignment before its user and project
+DELETE {{baseUrl}}/api/buildtrack/projectassignments/{{createProject.response.body.$.projectId}}/{{createUser.response.body.$.userId}}
+
+### Delete project material after its requests and usage
+DELETE {{baseUrl}}/api/buildtrack/projectmaterials/{{createProjectMaterial.response.body.$.projectMaterialId}}
+
+### Delete project after its dependent data
+DELETE {{baseUrl}}/api/buildtrack/projects/{{createProject.response.body.$.projectId}}
+
+### Delete user after its dependent data
+DELETE {{baseUrl}}/api/buildtrack/users/{{createUser.response.body.$.userId}}

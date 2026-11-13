@@ -10,6 +10,7 @@ var connectionString = builder.Configuration.GetConnectionString("BuildTrackData
 	?? throw new InvalidOperationException("BuildTrackDatabase is not configured.");
 
 builder.Services.AddValidation();
+builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 builder.Services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
 builder.Services.AddDbContext<BuildTrackDbContext>(options =>
@@ -19,6 +20,8 @@ builder.Services.AddCors();
 
 var app = builder.Build();
 app.UseExceptionHandler();
+if (app.Environment.IsDevelopment())
+	app.MapOpenApi();
 
 app.UseCors(builder => builder
 	.AllowAnyOrigin()

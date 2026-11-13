@@ -4,18 +4,15 @@ namespace BuildTrack.Contracts.Models;
 
 public sealed class CreateTimeRecordRequest
 {
-	[Required]
+	[Range(1, int.MaxValue)]
 	public int UserId { get; init; }
 
-	[Required]
-	public int ProjectId { get; init; }
+	public int? ProjectId { get; init; }
 
 	[Required]
 	public DateTime StartTime { get; init; }
 
-	[Required]
-	public DateTime EndTime { get; init; }
+	public DateTime? EndTime { get; init; }
 
-	[Required]
-	public TimeSpan Duration { get; init; }
+	public TimeSpan? Duration { get; init; }
 }
