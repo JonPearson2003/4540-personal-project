@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="BuildTrack.App.Views.ReceiptInvoiceFormPage"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:vm="clr-namespace:BuildTrack.App.ViewModels"
+	x:DataType="vm:ReceiptInvoiceFormViewModel" Title="Receipt invoice" Background="#F7F8FA">
+	<Grid>
+		<ScrollView>
+			<VerticalStackLayout Padding="20" Spacing="12">
+				<Label Text="Receipt or invoice" FontSize="24" FontAttributes="Bold" TextColor="#17202A" />
+				<Label Text="{Binding RecordKey, StringFormat='Receipt #{0}'}" IsVisible="{Binding IsEditing}" TextColor="#52606D" />
+				<Label Text="Project ID" TextColor="#17202A" />
+				<Entry Text="{Binding ProjectId}" Keyboard="Numeric" Background="White" />
+				<Label Text="User ID" TextColor="#17202A" />
+				<Entry Text="{Binding UserId}" Keyboard="Numeric" Background="White" />
+				<Label Text="Vendor" TextColor="#17202A" />
+				<Entry Text="{Binding Vendor}" Placeholder="Vendor name" Background="White" />
+				<Label Text="Amount" TextColor="#17202A" />
+				<Entry Text="{Binding Amount}" Keyboard="Numeric" Placeholder="0.00" Background="White" />
+				<Label Text="Purchase date" TextColor="#17202A" />
+				<DatePicker Date="{Binding PurchaseDate}" />
+				<Button Text="Take invoice photo" Command="{Binding CaptureInvoiceImageCommand}" Background="#006D77" TextColor="White" />
+				<Button Text="Choose invoice image" Command="{Binding SelectInvoiceImageCommand}" Background="#006D77" TextColor="White" />
+				<Label Text="{Binding InvoiceFileName}" TextColor="#52606D" />
+				<Label IsVisible="{Binding HasError}" Text="{Binding ErrorMessage}" TextColor="#B42318" />
+				<Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+					<Button Text="Save" Command="{Binding SaveCommand}" Background="#006D77" TextColor="White" />
+					<Button Grid.Column="1" Text="Cancel" Command="{Binding CancelCommand}" Background="#E2E8F0" TextColor="#17202A" />
+				</Grid>
+				<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#006D77" />
+			</VerticalStackLayout>
+		</ScrollView>
+	</Grid>
+</ContentPage>

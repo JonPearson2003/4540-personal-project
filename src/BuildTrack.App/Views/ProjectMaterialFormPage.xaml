@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="BuildTrack.App.Views.ProjectMaterialFormPage"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:vm="clr-namespace:BuildTrack.App.ViewModels"
+	x:DataType="vm:ProjectMaterialFormViewModel" Title="Project material" Background="#F7F8FA">
+	<Grid>
+		<ScrollView>
+			<VerticalStackLayout Padding="20" Spacing="12">
+				<Label Text="Project material" FontSize="24" FontAttributes="Bold" TextColor="#17202A" />
+				<Label Text="{Binding RecordKey, StringFormat='Material #{0}'}" IsVisible="{Binding IsEditing}" TextColor="#52606D" />
+				<Label Text="Project ID" TextColor="#17202A" />
+				<Entry Text="{Binding ProjectId}" Keyboard="Numeric" Placeholder="Project ID" Background="White" />
+				<Label Text="Name" TextColor="#17202A" />
+				<Entry Text="{Binding Name}" Placeholder="Material name" Background="White" />
+				<Label Text="Description" TextColor="#17202A" />
+				<Editor Text="{Binding Description}" Placeholder="Material description" AutoSize="TextChanges" BackgroundColor="White" />
+				<Label Text="Unit price" TextColor="#17202A" />
+				<Entry Text="{Binding Price}" Keyboard="Text" Placeholder="0.00" Background="White" />
+				<Label Text="Quantity" TextColor="#17202A" />
+				<Entry Text="{Binding Quantity}" Keyboard="Text" Placeholder="0" Background="White" />
+				<Label IsVisible="{Binding HasError}" Text="{Binding ErrorMessage}" TextColor="#B42318" />
+				<Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+					<Button Text="Save" Command="{Binding SaveCommand}" Background="#006D77" TextColor="White" />
+					<Button Grid.Column="1" Text="Cancel" Command="{Binding CancelCommand}" Background="#E2E8F0" TextColor="#17202A" />
+				</Grid>
+				<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#006D77" />
+			</VerticalStackLayout>
+		</ScrollView>
+	</Grid>
+</ContentPage>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="BuildTrack.App.Views.MaterialRequestFormPage"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:vm="clr-namespace:BuildTrack.App.ViewModels"
+	x:DataType="vm:MaterialRequestFormViewModel" Title="Material request" Background="#F7F8FA">
+	<Grid>
+		<ScrollView>
+			<VerticalStackLayout Padding="20" Spacing="12">
+				<Label Text="Material request" FontSize="24" FontAttributes="Bold" TextColor="#17202A" />
+				<Label Text="{Binding RecordKey, StringFormat='Request #{0}'}" IsVisible="{Binding IsEditing}" TextColor="#52606D" />
+				<Label Text="Project ID" TextColor="#17202A" />
+				<Entry Text="{Binding ProjectId}" Keyboard="Numeric" Background="White" />
+				<Label Text="Requested by (user ID)" TextColor="#17202A" />
+				<Entry Text="{Binding RequestedByUserId}" Keyboard="Numeric" Background="White" />
+				<Label Text="Material ID" TextColor="#17202A" />
+				<Entry Text="{Binding MaterialId}" Keyboard="Numeric" Background="White" />
+				<Label Text="Quantity requested" TextColor="#17202A" />
+				<Entry Text="{Binding QuantityRequested}" Keyboard="Numeric" Background="White" />
+				<Label Text="Unit" TextColor="#17202A" />
+				<Entry Text="{Binding Unit}" Placeholder="e.g. pieces" Background="White" />
+				<Label Text="Priority" TextColor="#17202A" />
+				<Picker Title="Priority" ItemsSource="{Binding PriorityOptions}" SelectedItem="{Binding Priority}" />
+				<Label Text="Status" TextColor="#17202A" />
+				<Picker Title="Status" ItemsSource="{Binding StatusOptions}" SelectedItem="{Binding Status}" />
+				<Label Text="Notes" TextColor="#17202A" />
+				<Editor Text="{Binding Notes}" AutoSize="TextChanges" BackgroundColor="White" />
+				<Label Text="Requested date" TextColor="#17202A" />
+				<DatePicker Date="{Binding RequestedAt}" />
+				<HorizontalStackLayout Spacing="8">
+					<CheckBox IsChecked="{Binding IsReviewed}" />
+					<Label Text="Request has been reviewed" VerticalOptions="Center" TextColor="#17202A" />
+				</HorizontalStackLayout>
+				<Label Text="Reviewed by (user ID)" TextColor="#17202A" />
+				<Entry Text="{Binding ReviewedByUserId}" Keyboard="Numeric" IsEnabled="{Binding IsReviewed}" Background="White" />
+				<Label Text="Reviewed date" TextColor="#17202A" />
+				<DatePicker Date="{Binding ReviewedAt}" IsEnabled="{Binding IsReviewed}" />
+				<Label IsVisible="{Binding HasError}" Text="{Binding ErrorMessage}" TextColor="#B42318" />
+				<Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+					<Button Text="Save" Command="{Binding SaveCommand}" Background="#006D77" TextColor="White" />
+					<Button Grid.Column="1" Text="Cancel" Command="{Binding CancelCommand}" Background="#E2E8F0" TextColor="#17202A" />
+				</Grid>
+				<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#006D77" />
+			</VerticalStackLayout>
+		</ScrollView>
+	</Grid>
+</ContentPage>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="BuildTrack.App.Views.ProjectStatusFormPage"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:vm="clr-namespace:BuildTrack.App.ViewModels"
+	x:DataType="vm:ProjectStatusFormViewModel" Title="Project update" Background="#F7F8FA">
+	<Grid>
+		<ScrollView>
+			<VerticalStackLayout Padding="20" Spacing="12">
+				<Label Text="Project status update" FontSize="24" FontAttributes="Bold" TextColor="#17202A" />
+				<Label Text="{Binding RecordKey, StringFormat='Update #{0}'}" IsVisible="{Binding IsEditing}" TextColor="#52606D" />
+				<Label Text="Project ID" TextColor="#17202A" />
+				<Entry Text="{Binding ProjectId}" Keyboard="Numeric" Placeholder="Project ID" Background="White" />
+				<Label Text="Status" TextColor="#17202A" />
+				<Entry Text="{Binding Status}" Placeholder="Describe the project status" Background="White" />
+				<Label Text="Date" TextColor="#17202A" />
+				<DatePicker Date="{Binding Date}" />
+				<Button Text="Take progress photo" Command="{Binding CapturePhotoCommand}" Background="#006D77" TextColor="White" />
+				<Button Text="Choose progress photo" Command="{Binding SelectPhotoCommand}" Background="#006D77" TextColor="White" />
+				<Label Text="{Binding PhotoFileName}" TextColor="#52606D" />
+				<Label IsVisible="{Binding HasError}" Text="{Binding ErrorMessage}" TextColor="#B42318" />
+				<Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+					<Button Text="Save" Command="{Binding SaveCommand}" Background="#006D77" TextColor="White" />
+					<Button Grid.Column="1" Text="Cancel" Command="{Binding CancelCommand}" Background="#E2E8F0" TextColor="#17202A" />
+				</Grid>
+				<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#006D77" />
+			</VerticalStackLayout>
+		</ScrollView>
+	</Grid>
+</ContentPage>
