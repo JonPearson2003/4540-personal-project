@@ -4,6 +4,8 @@
 <dict>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>BuildTrack uses the camera to capture project progress photos and invoices.</string>
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>

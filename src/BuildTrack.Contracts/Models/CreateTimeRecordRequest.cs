@@ -14,5 +14,4 @@ public sealed class CreateTimeRecordRequest
 
 	public DateTime? EndTime { get; init; }
 
-	public TimeSpan? Duration { get; init; }
 }

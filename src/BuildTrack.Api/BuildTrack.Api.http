@@ -80,8 +80,7 @@ Content-Type: application/json
   "userId": {{createUser.response.body.$.userId}},
   "projectId": {{createProject.response.body.$.projectId}},
   "startTime": "2026-11-12T08:00:00",
-  "endTime": null,
-  "duration": null
+  "endTime": null
 }
 
 ### List time records
@@ -99,8 +98,7 @@ Content-Type: application/json
 {
   "projectId": {{createProject.response.body.$.projectId}},
   "startTime": "2026-11-12T08:00:00",
-  "endTime": "2026-11-12T16:00:00",
-  "duration": "08:00:00"
+  "endTime": "2026-11-12T16:00:00"
 }
 
 ### Add a material to a project

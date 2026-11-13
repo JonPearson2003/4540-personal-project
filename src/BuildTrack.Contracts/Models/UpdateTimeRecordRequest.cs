@@ -11,5 +11,4 @@ public sealed class UpdateTimeRecordRequest
 
 	public DateTime? EndTime { get; init; }
 
-	public TimeSpan? Duration { get; init; }
 }

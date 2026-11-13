@@ -323,7 +323,7 @@ public static class BuildTrackEndpoints
 		BuildTrackDbContext database,
 		CancellationToken cancellationToken)
 	{
-		var validationProblem = ValidateTimeRecord(request.StartTime, request.EndTime, request.Duration);
+		var validationProblem = ValidateTimeRecord(request.StartTime, request.EndTime);
 		if (validationProblem is not null)
 			return validationProblem;
 
@@ -340,7 +340,9 @@ public static class BuildTrackEndpoints
 			ProjectId = request.ProjectId,
 			StartTime = request.StartTime,
 			EndTime = request.EndTime,
-			Duration = request.Duration
+			Duration = request.EndTime is DateTime completedAt
+				? completedAt - request.StartTime
+				: null
 		};
 		database.TimeRecords.Add(entity);
 		await database.SaveChangesAsync(cancellationToken);
@@ -355,7 +357,7 @@ public static class BuildTrackEndpoints
 		BuildTrackDbContext database,
 		CancellationToken cancellationToken)
 	{
-		var validationProblem = ValidateTimeRecord(request.StartTime, request.EndTime, request.Duration);
+		var validationProblem = ValidateTimeRecord(request.StartTime, request.EndTime);
 		if (validationProblem is not null)
 			return validationProblem;
 
@@ -370,7 +372,9 @@ public static class BuildTrackEndpoints
 		entity.ProjectId = request.ProjectId;
 		entity.StartTime = request.StartTime;
 		entity.EndTime = request.EndTime;
-		entity.Duration = request.Duration;
+		entity.Duration = request.EndTime is DateTime completedAt
+			? completedAt - request.StartTime
+			: null;
 		await database.SaveChangesAsync(cancellationToken);
 		return TypedResults.NoContent();
 	}
@@ -395,19 +399,11 @@ public static class BuildTrackEndpoints
 
 	private static ValidationProblem? ValidateTimeRecord(
 		DateTime startTime,
-		DateTime? endTime,
-		TimeSpan? duration)
+		DateTime? endTime)
 	{
 		var errors = new Dictionary<string, string[]>();
-		if (endTime.HasValue != duration.HasValue)
-		{
-			errors[nameof(CreateTimeRecordRequest.EndTime)] =
-				["EndTime and Duration must either both be set or both be empty."];
-		}
 		if (endTime is DateTime completedAt && completedAt <= startTime)
 			errors[nameof(CreateTimeRecordRequest.EndTime)] = ["EndTime must be later than StartTime."];
-		if (duration is TimeSpan elapsed && elapsed <= TimeSpan.Zero)
-			errors[nameof(CreateTimeRecordRequest.Duration)] = ["Duration must be positive."];
 		return errors.Count == 0 ? null : TypedResults.ValidationProblem(errors);
 	}
 

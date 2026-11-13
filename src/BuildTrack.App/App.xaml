@@ -1,4 +1,5 @@
 ﻿<Application xmlns:local="clr-namespace:BuildTrack.App"
+             xmlns:converters="clr-namespace:BuildTrack.App.Converters"
              x:Class="BuildTrack.App.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -6,6 +7,7 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
