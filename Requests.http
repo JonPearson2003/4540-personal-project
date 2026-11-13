@@ -50,3 +50,6 @@ Content-Type: application/json
 ### Missing ID: expect 404
 GET {{baseUrl}}/api/buildtrack/users/999999
 Accept: application/json
+
+### Get all status reports
+GET {{baseUrl}}/api/buildtrack/projectstatuses
